@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ProtoRegister.Utils {
     public static class Util {
-        public static void AddToArray<T>(ref T[] array, List<T> values) {
-            var oldSize = array.Length;
-            Array.Resize(ref array,  oldSize + values.Count);
+        public static void AddToArray<T>(ref T[] array, ICollection<T> values) {
+            var oldLength = array.Length;
+            Array.Resize(ref array,  oldLength + values.Count);
             for (var i = 0; i < values.Count; i++) {
-                array[oldSize + i] = values[i];
-            }
-        }
-        
-        public static void AddToArray<T>(ref T[] array, T[] values) {
-            var oldSize = array.Length;
-            Array.Resize(ref array,  oldSize + values.Length);
-            for (var i = 0; i < values.Length; i++) {
-                array[oldSize + i] = values[i];
+                array[oldLength + i] = values.ElementAt(i);
             }
         }
 

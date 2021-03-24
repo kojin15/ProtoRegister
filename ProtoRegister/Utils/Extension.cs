@@ -20,7 +20,14 @@ namespace ProtoRegister.Utils {
                 action(value, index++);
             }
         }
-        
+
+        public static string JoinToString<T>(this IEnumerable<T> sequence, string separator) {
+            return string.Join(separator, sequence.Select(it => it.ToString()).ToArray());
+        }
+
+        public static string JoinToString<T, R>(this IEnumerable<T> sequence, string separator, Func<T, R> func)
+            => JoinToString(sequence.Select(func), separator);
+
         public static int[] ToIntArray(this IEnumerable<EItemDescType> array) => array.Select(it => (int) it).ToArray();
         
         public static ConfigEntry<T> Bind<T>(this ConfigFile config, ref T field, string section, string key, ConfigDescription configDescription = null) {
@@ -62,7 +69,7 @@ namespace ProtoRegister.Utils {
             }
         }
 
-        public static void Add<T>(this ProtoSet<T> protoSet, List<T> protos) where T : Proto {
+        public static void Add<T>(this ProtoSet<T> protoSet, ICollection<T> protos) where T : Proto {
             var oldLength = protoSet.Length;
             Util.AddToArray(ref protoSet.dataArray, protos);
 

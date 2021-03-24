@@ -14,6 +14,7 @@ namespace ProtoRegister {
             ProtoRegister.PreAddAction?.Invoke();
             
             LDB.strings.Add(ProtoRegister.AddStringProtos);
+            ProtoRegister.Logger.LogInfo("Added StringProto:[" + ProtoRegister.AddStringProtos.JoinToString(",", proto => proto.ID) + "]");
             JPTranslatePatch();
         }
         
@@ -36,7 +37,11 @@ namespace ProtoRegister {
             ProtoRegister.PostAddAction?.Invoke();
             
             LDB.items.Add(ProtoRegister.AddItemProtos);
+            ProtoRegister.Logger.LogInfo("Added ItemProto:[" + ProtoRegister.AddItemProtos.JoinToString(",", proto => proto.ID) + "]");
+            
             LDB.recipes.Add(ProtoRegister.AddRecipeProtos);
+            ProtoRegister.Logger.LogInfo("Added RecipeProto:[" + ProtoRegister.AddRecipeProtos.JoinToString(",", proto => proto.ID) + "]");
+            
             ProtoRegister.AddRecipeProtos
                 .Where(proto => proto.preTech != null)
                 .ForEach(proto => Util.AddToArray(ref proto.preTech.UnlockRecipes, proto.ID));
@@ -46,6 +51,7 @@ namespace ProtoRegister {
         [HarmonyPatch(typeof (GameHistoryData), "Import")]
         private static void GameHistoryDataPostPatch(GameHistoryData __instance) {
             ProtoRegister.Logger.LogInfo("GameHistoryDataPatch.Postfix invoked.");
+            
             ProtoRegister.AddRecipeProtos
                 .Where(proto => proto.preTech != null && __instance.TechState(proto.preTech.ID).unlocked && !__instance.RecipeUnlocked(proto.ID))
                 .ForEach(proto => __instance.UnlockRecipe(proto.ID));
