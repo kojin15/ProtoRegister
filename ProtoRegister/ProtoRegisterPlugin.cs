@@ -2,8 +2,8 @@
 using System.Reflection;
 using BepInEx;
 using HarmonyLib;
-using ProtoRegister.Patch;
-using ProtoRegister.Proto;
+using ProtoRegister.Protos;
+using ProtoRegister.Utils;
 using UnityEngine;
 
 namespace ProtoRegister {
@@ -21,14 +21,26 @@ namespace ProtoRegister {
             ProtoRegister.AddStringProtos = new List<StringProto>();
             ProtoRegister.AddItemProtos = new List<ItemProto>();
             ProtoRegister.AddRecipeProtos = new List<RecipeProto>();
-
+        }
+        
+        private void Start() {
+            ProtoRegister.PreAddAction += PreLoad;
+            ProtoRegister.PostAddAction += PostLoad;
+            
+            var harmony = new Harmony(ModGuid + ".patch");
+            harmony.PatchAll(typeof(ProtoRegisterPatch));
+        }
+        
+        private static void PreLoad() {
+            var stringSapling = new StringProtoJP(28500, "sapling", "Sapling", "苗木");
+            ProtoRegister.RegisterString(stringSapling);
+        }
+        
+        private static void PostLoad() {
             var bundle = AssetBundle.LoadFromStream(Assembly.GetExecutingAssembly()
                 .GetManifestResourceStream("ProtoRegister.resources"));
             var iconSapling = bundle.LoadAsset<Sprite>("iconSapling");
             
-            var stringSapling = new StringProtoJP(28500, "sapling", "Sapling", "苗木");
-            ProtoRegister.RegisterString(stringSapling);
-
             var itemSapling = new ItemProto {
                 Name = "sapling",
                 ID = 9150,
@@ -40,7 +52,7 @@ namespace ProtoRegister {
             }.SetIconSprite(iconSapling);
             ProtoRegister.RegisterItem(itemSapling);
 
-            var recipeSapling = new CustomRecipeProto {
+            var recipeSapling = new RecipeProto {
                 Name = "sapling",
                 ID = 220,
                 GridIndex = 1610,
@@ -52,15 +64,9 @@ namespace ProtoRegister {
                 TimeSpend = 30,
                 Handcraft = true,
                 Description = "",
-                preTechID = 1121
+                preTech = LDB.techs.Select(1121)
             }.SetIconSprite(iconSapling);
             ProtoRegister.RegisterRecipe(recipeSapling);
-        }
-
-        private void Start() {
-            var harmony = new Harmony(ModGuid + ".patch");
-            harmony.PatchAll(typeof(InvokeOnLoadPatch));
-            harmony.PatchAll(typeof(GameHistoryDataPatch));
         }
     }
 }

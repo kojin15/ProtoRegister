@@ -1,4 +1,4 @@
-﻿namespace ProtoRegister.Proto {
+﻿namespace ProtoRegister.Protos {
     public enum EItemDescType {
         GatheredFrom,
         MadeIn,

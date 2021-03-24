@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ProtoRegister.Proto {
-    
+namespace ProtoRegister.Protos {
     public class StringProtoJP : StringProto {
         public string JAJP;
 
@@ -18,9 +17,5 @@ namespace ProtoRegister.Proto {
             FRFR = frfr;
             JAJP = jajp;
         }
-    }
-
-    public class CustomRecipeProto : RecipeProto {
-        public int preTechID;
     }
 }

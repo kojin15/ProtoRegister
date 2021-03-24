@@ -1,4 +1,4 @@
-﻿namespace ProtoRegister.Proto {
+﻿namespace ProtoRegister.Protos {
     public enum EFuelType {
         None = 0,
         Chemical = 1,

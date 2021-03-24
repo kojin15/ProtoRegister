@@ -1,42 +1,51 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BepInEx.Configuration;
 using BepInEx.Logging;
-using HarmonyLib;
-using ProtoRegister.Proto;
+using ProtoRegister.Utils;
 
 namespace ProtoRegister {
     public static class ProtoRegister {
         internal static ManualLogSource Logger;
         internal static ConfigFile Config;
 
+        private const string SectionString = "String";
         private const string SectionItem = "Item";
         private const string SectionRecipe = "Recipe";
-        
+
+        public static Action PreAddAction, PostAddAction;
+
         internal static List<StringProto> AddStringProtos;
         internal static List<ItemProto> AddItemProtos;
         internal static List<RecipeProto> AddRecipeProtos;
 
         public static void RegisterString(StringProto proto) {
+            BindConfig(proto);
             AddStringProtos.Add(proto);
         }
         
         public static void RegisterItem(ItemProto proto) {
+            BindConfig(proto);
             AddItemProtos.Add(proto);
         }
         
         public static void RegisterRecipe(RecipeProto proto) {
+            BindConfig(proto);
             AddRecipeProtos.Add(proto);
         }
-        
-        internal static void BindConfig(global::Proto proto) {
+
+        private static void BindConfig(Proto proto) {
             switch (proto) {
+                case StringProto _string:
+                    Config.Bind(ref _string.ID, SectionString, _string.Name + ":ID");
+                    break;
                 case ItemProto item:
-                    item.ID = Config.Bind(SectionItem, item.Name + ":ID", item.ID).Value;
-                    item.GridIndex = Config.Bind(SectionItem, item.Name + ":GridIndex", item.GridIndex).Value;
+                    Config.Bind(ref item.ID, SectionItem, item.Name + ":ID");
+                    Config.Bind(ref item.GridIndex, SectionItem, item.Name + ":GridIndex");
                     break;
                 case RecipeProto recipe:
-                    recipe.ID = Config.Bind(SectionRecipe, recipe.Name + ":ID", recipe.ID).Value;
-                    recipe.GridIndex = Config.Bind(SectionRecipe, recipe.Name + ":GridIndex", recipe.GridIndex).Value;
+                    Config.Bind(ref recipe.ID, SectionRecipe, recipe.Name + ":ID");
+                    Config.Bind(ref recipe.GridIndex, SectionRecipe, recipe.Name + ":GridIndex");
                     break;
             }
         }
