@@ -21,18 +21,10 @@ namespace ProtoRegister {
         }
         
         public static void RegisterItem(ItemProto proto) {
-            if (proto is CustomItemProto itemProto) {
-                var icon = itemProto.customIcon;
-                Traverse.Create(proto).Field("_iconSprite").SetValue(icon);
-            }
             AddItemProtos.Add(proto);
         }
         
         public static void RegisterRecipe(RecipeProto proto) {
-            if (proto is CustomRecipeProto recipeProto) {
-                var icon = recipeProto.customIcon;
-                Traverse.Create(proto).Field("_iconSprite").SetValue(icon);
-            }
             AddRecipeProtos.Add(proto);
         }
         

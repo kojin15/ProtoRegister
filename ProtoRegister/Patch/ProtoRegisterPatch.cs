@@ -28,8 +28,7 @@ namespace ProtoRegister.Patch {
             
             foreach (var proto in ProtoRegister.AddRecipeProtos.OfType<CustomRecipeProto>()) {
                 if (proto.preTechID == 0) continue;
-                var newArray = LDB.techs.Select(proto.preTechID).UnlockRecipes.Add(proto.ID);
-                LDB.techs.Select(proto.preTechID).UnlockRecipes = newArray;
+                Util.AddToArray(ref LDB.techs.Select(proto.preTechID).UnlockRecipes, proto.ID);
             }
         }
         
@@ -39,8 +38,8 @@ namespace ProtoRegister.Patch {
             
             ProtoRegister.Logger.LogInfo("Add to translation dictionary.");
             if (AccessTools.Property(type, "JPDictionary").GetValue(type, null) is Dictionary<string, string> dic) {
-                foreach (var protoJP in ProtoRegister.AddStringProtos.OfType<StringProtoJP>()) { 
-                    dic.Add(protoJP.name, protoJP.JAJP);
+                foreach (var protoJP in ProtoRegister.AddStringProtos.OfType<StringProtoJP>()) {
+                    dic[protoJP.name] = protoJP.JAJP;
                 }
             }
         }

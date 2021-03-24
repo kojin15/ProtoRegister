@@ -19,12 +19,8 @@ namespace ProtoRegister.Proto {
             JAJP = jajp;
         }
     }
-    public class CustomItemProto : ItemProto {
-        public Sprite customIcon;
-    }
 
     public class CustomRecipeProto : RecipeProto {
         public int preTechID;
-        public Sprite customIcon;
     }
 }

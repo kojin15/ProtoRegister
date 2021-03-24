@@ -59,7 +59,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Extension.cs" />
+        <Compile Include="Util.cs" />
         <Compile Include="Patch\ProtoRegisterPatch.cs" />
         <Compile Include="ProtoRegister.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />

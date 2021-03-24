@@ -29,19 +29,18 @@ namespace ProtoRegister {
             var stringSapling = new StringProtoJP(28500, "sapling", "Sapling", "苗木");
             ProtoRegister.RegisterString(stringSapling);
 
-            var itemSapling = new CustomItemProto() {
+            var itemSapling = new ItemProto {
                 Name = "sapling",
                 ID = 9150,
                 GridIndex = 1506,
                 Type = EItemType.Resource,
                 StackSize = 200,
                 Description = "",
-                DescFields = new [] {EItemDescType.MadeIn}.ToIntArray(),
-                customIcon = iconSapling
-            };
+                DescFields = new [] {EItemDescType.MadeIn}.ToIntArray()
+            }.SetIconSprite(iconSapling);
             ProtoRegister.RegisterItem(itemSapling);
 
-            var recipeSapling = new CustomRecipeProto() {
+            var recipeSapling = new CustomRecipeProto {
                 Name = "sapling",
                 ID = 220,
                 GridIndex = 1610,
@@ -53,9 +52,8 @@ namespace ProtoRegister {
                 TimeSpend = 30,
                 Handcraft = true,
                 Description = "",
-                preTechID = 1121,
-                customIcon = iconSapling
-            };
+                preTechID = 1121
+            }.SetIconSprite(iconSapling);
             ProtoRegister.RegisterRecipe(recipeSapling);
         }
 
