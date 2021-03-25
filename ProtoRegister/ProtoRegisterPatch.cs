@@ -3,6 +3,7 @@ using System.Linq;
 using HarmonyLib;
 using ProtoRegister.Protos;
 using ProtoRegister.Utils;
+using xiaoye97;
 
 namespace ProtoRegister {
     public static class ProtoRegisterPatch {
@@ -19,14 +20,13 @@ namespace ProtoRegister {
         }
         
         private static void JPTranslatePatch() {
-            var type = AccessTools.TypeByName("DSPJapanesePlugin.DSPJapaneseMod");
-            if (type == null) return;
-                    
-            ProtoRegister.Logger.LogInfo("Add to translation dictionary.");
-            if (AccessTools.Property(type, "JPDictionary").GetValue(type, null) is Dictionary<string, string> dic) {
-                ProtoRegister.AddStringProtos.OfType<StringProtoJP>()
-                    .ForEach(protoJP => dic.Add(protoJP.name, protoJP.JAJP));
-            }
+            AccessTools.TypeByName("DSPJapanesePlugin.DSPJapaneseMod")
+                ?.GetPropertyValue<Dictionary<string, string>>("JPDictionary")?.Also(
+                    dic => {
+                        ProtoRegister.Logger.LogInfo("Add to japanese translation dictionary.");
+                        ProtoRegister.AddStringProtos.OfType<StringProtoJP>()
+                            .ForEach(protoJP => dic.Add(protoJP.name, protoJP.JAJP));
+                    });
         }
 
         [HarmonyPostfix]
@@ -48,7 +48,7 @@ namespace ProtoRegister {
         }
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof (GameHistoryData), "Import")]
+        [HarmonyPatch(typeof(GameHistoryData), "Import")]
         private static void GameHistoryDataPostPatch(GameHistoryData __instance) {
             ProtoRegister.Logger.LogInfo("GameHistoryDataPatch.Postfix invoked.");
             

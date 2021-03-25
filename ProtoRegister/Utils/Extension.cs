@@ -8,6 +8,13 @@ using UnityEngine;
 
 namespace ProtoRegister.Utils {
     public static class Extension {
+        public static R Let<T, R>(this T value, Func<T, R> func) => func(value);
+
+        public static T Also<T>(this T value, Action<T> action) {
+            action(value);
+            return value;
+        }
+        
         public static void ForEach<T>(this IEnumerable<T> sequence, Action<T> action) {
             foreach (var value in sequence) {
                 action(value);
@@ -81,5 +88,11 @@ namespace ProtoRegister.Utils {
                 protos.ForEachIndexed((proto, index) => nameIndices.Add(proto.Name, index + oldLength));
             }
         }
+
+        public static T GetPropertyValue<T>(this Type type, string name, object[] index = null) 
+            => (T) type.GetProperty(name, typeof(T))?.GetValue(type, index);
+
+        public static void SetPropertyValue<T>(this Type type, string name, T value, object[] index = null) 
+            => type.GetProperty(name, typeof(T))?.SetValue(type, value, index);
     }
 }
