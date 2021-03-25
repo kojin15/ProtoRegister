@@ -20,12 +20,10 @@ namespace ProtoRegister {
         
         private static void JPTranslatePatch() {
             AccessTools.TypeByName("DSPJapanesePlugin.DSPJapaneseMod")
-                ?.GetPropertyValue<Dictionary<string, string>>("JPDictionary")?.Also(
-                    dic => {
+                ?.GetStaticPropValue<Dictionary<string, string>>("JPDictionary")?.Also(dic => {
                         ProtoRegister.Logger.LogInfo("Add to japanese translation dictionary.");
-                        ProtoRegister.AddStringProtos.OfType<StringProtoJP>()
-                            .ForEach(protoJP => dic.Add(protoJP.name, protoJP.JAJP));
-                    });
+                        ProtoRegister.AddStringProtos.OfType<StringProtoJP>().ForEach(protoJP => dic.Add(protoJP.name, protoJP.JAJP)); 
+                });
         }
 
         [HarmonyPostfix]

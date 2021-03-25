@@ -88,11 +88,29 @@ namespace ProtoRegister.Utils {
                 protos.ForEachIndexed((proto, index) => nameIndices.Add(proto.Name, index + oldLength));
             }
         }
+        
+        public static T GetPropValue<T>(this Type type, object instance, string name, object[] index = null) where T : class 
+            => type.GetProperty(name, typeof(T))?.GetValue(instance, index) as T;
 
-        public static T GetPropertyValue<T>(this Type type, string name, object[] index = null) 
-            => (T) type.GetProperty(name, typeof(T))?.GetValue(type, index);
+        public static T GetStaticPropValue<T>(this Type type, string name, object[] index = null) where T : class
+            => GetPropValue<T>(type, type, name, index);
 
-        public static void SetPropertyValue<T>(this Type type, string name, T value, object[] index = null) 
-            => type.GetProperty(name, typeof(T))?.SetValue(type, value, index);
+        public static void SetPropValue<T>(this Type type, object instance, string name, T value, object[] index = null) where T : class 
+            => type.GetProperty(name, typeof(T))?.SetValue(instance, value, index);
+
+        public static void SetStaticPropValue<T>(this Type type, string name, T value, object[] index = null) where T : class
+            => SetPropValue(type, type, name, value, index);
+
+        public static T Copy<T>(this T orig) where T : class {
+            var type = orig.GetType();
+            var instance = Activator.CreateInstance(type);
+            type.GetFields().Where(field => !field.IsLiteral && !field.IsStatic).ForEach(field => {
+                field.SetValue(instance, field.GetValue(orig));
+            });
+            type.GetProperties().Where(property => property.CanRead && property.CanWrite).ForEach(property => {
+                property.SetValue(instance, property.GetValue(orig, null), null);
+            });
+            return instance as T;
+        }
     }
 }
