@@ -3,7 +3,6 @@ using System.Linq;
 using HarmonyLib;
 using ProtoRegister.Protos;
 using ProtoRegister.Utils;
-using xiaoye97;
 
 namespace ProtoRegister {
     public static class ProtoRegisterPatch {

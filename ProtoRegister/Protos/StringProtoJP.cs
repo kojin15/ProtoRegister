@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace ProtoRegister.Protos {
+﻿namespace ProtoRegister.Protos {
     public class StringProtoJP : StringProto {
         public string JAJP;
 
